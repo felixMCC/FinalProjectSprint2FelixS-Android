@@ -6,9 +6,9 @@ package com.example;
 public class Player {
     //class global variables
 
-    public String name = "";       //players name
-    int rating = 0;         //value from 1-5, rating of how good the player is
-    int team = 0;           //team number the player belongs to
+    private String name = "";       //players name
+    private int rating = 0;         //value from 1-5, rating of how good the player is
+    private int team = 0;           //team number the player belongs to
 
     //Player object constructor for player
     Player(String pName, int pRating){
@@ -29,5 +29,13 @@ public class Player {
 
     public String getName(){
         return name;
+    }
+
+    public int getRating(){
+        return rating;
+    }
+
+    public int getTeam(){
+        return team;
     }
 }

@@ -7,17 +7,19 @@ import java.util.*;
 public class Model {
     //create random number generator object
     Random generator = new Random(System.currentTimeMillis());
-    int randomLimit = 12;                       //range for random number from 0 to randomLimit
-    Scanner input = new Scanner(System.in);     //used to get user input
-    int numberOfPlayers = 0;                    //number of players for game
-    ArrayList players = new ArrayList();        //holds all player objects
-    Iterator it = players.iterator();           //create iterator for Array List
+    int randomLimit = 12;                           //range for random number from 0 to randomLimit
+    Scanner input = new Scanner(System.in);         //used to get user input
+    int numberOfPlayers = 0;                        //number of players for game
+    ArrayList players = new ArrayList();            //holds all player objects
+    Iterator<Player> it = players.iterator();       //create iterator for Array List
 
     //getter methods
 
     public int getNumberOfPlayers(){
         return numberOfPlayers;
     }
+
+    public ArrayList getPlayerList(){ return players; }
 
     //setter methods
     public void setNumberOfPlayers(int nPlayers){
@@ -55,8 +57,11 @@ public class Model {
     //print player info
     public void printPlayersInfo(){
         while(it.hasNext()){
-            Object tempPlayer = it.next();
-            
+            //get player from iterator object
+            Player tempPlayer = it.next();
+            //print player info
+
+
         }
     }
 }

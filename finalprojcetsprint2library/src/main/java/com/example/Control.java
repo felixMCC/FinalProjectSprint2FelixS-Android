@@ -14,7 +14,7 @@ public class Control {
         theModel.identify();
         theView.identify();
 
-        for(int cnt = 0; cnt < 10; cnt++){
+        for(int cnt = 0; cnt < 3; cnt++){
             theView.printToUser("Random Number: " + theModel.randomNumber());
         }
 
@@ -26,6 +26,8 @@ public class Control {
             createPlayer();
         }
 
+        //print player info
+        printPlayerInfo();
     }
 
     //prompts user for total number of players
@@ -51,7 +53,7 @@ public class Control {
             int tempRating = 0;
             theView.printToUser("Please enter player's name:");
             tempName = theModel.getUserInput();
-            theView.printToUser("Please enter player's rating 1-5:\n(1 = novice, 5 = expert");
+            theView.printToUser("Please enter player's rating 1-5:\n(1 = novice, 5 = expert)");
             tempRating = Integer.parseInt(theModel.getUserInput());
             //create player object and store within the model
             theModel.createAndStorePlayer(tempName, tempRating);
@@ -62,7 +64,19 @@ public class Control {
         }
 
 
+    }
 
+    //print player info
+    private void printPlayerInfo(){
+        theView.printToUser("\nPrinting player info: \n");
+        //pass the player list from the model to the view for printing
+        theView.setPlayerList(theModel.getPlayerList());
+        //tell the view to print the list
+        theView.printPlayersInfo();
     }
 
 }
+
+
+
+
