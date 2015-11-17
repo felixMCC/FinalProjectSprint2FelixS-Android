@@ -38,4 +38,10 @@ public class Player {
     public int getTeam(){
         return team;
     }
+
+    //setter methods
+
+    public void setTeam(int pTeam){
+        team = pTeam;
+    }
 }

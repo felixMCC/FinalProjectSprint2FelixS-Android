@@ -7,7 +7,7 @@ import java.util.*;
  */
 public class View {
     ArrayList viewPlayers;
-    Iterator<Player> it;       //create iterator for Array List
+    Iterator<Player> itPlayer;       //create iterator for Array List
 
     //setter methods
 
@@ -29,16 +29,38 @@ public class View {
     //print player info
     public void printPlayersInfo(){
         //attach iterator object
-        it = viewPlayers.iterator();
-        while(it.hasNext()){
+        itPlayer = viewPlayers.iterator();
+        while(itPlayer.hasNext()){
 
             //get player from iterator object
-            Player tempPlayer = it.next();
+            Player tempPlayer = itPlayer.next();
             //print player info
             printToUser("Player name: \t" + tempPlayer.getName() + "\n");
             printToUser("Player rating: " + tempPlayer.getRating());
             printToUser("Player team: " + tempPlayer.getTeam() + "\n");
 
+        }
+    }
+
+    //print teams
+    public void printTeams(Team[] tArray){
+        printToUser("\nPrinting Teams:");
+        //go through team list
+        for(int cnt = 1; cnt < tArray.length; cnt++ ){
+            printToUser("\nTEAM " + cnt + ": ");
+            //send player array to be printed
+            iterateThroughPlayerArray(tArray[cnt].getPlayerArray());
+        }
+
+    }
+
+    //iterates through an array of Players and pritns out info
+    private void iterateThroughPlayerArray(Player[] pArray){
+        for(int cnt = 0; cnt < pArray.length; cnt++){
+            //print player info
+            printToUser("Player name: \t" + pArray[cnt].getName() + "\n");
+            printToUser("Player rating: " + pArray[cnt].getRating());
+            printToUser("Player team: " + pArray[cnt].getTeam() + "\n");
         }
     }
 }
