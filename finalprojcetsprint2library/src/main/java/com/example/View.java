@@ -57,10 +57,13 @@ public class View {
     //iterates through an array of Players and pritns out info
     private void iterateThroughPlayerArray(Player[] pArray){
         for(int cnt = 0; cnt < pArray.length; cnt++){
-            //print player info
-            printToUser("Player name: \t" + pArray[cnt].getName() + "\n");
-            printToUser("Player rating: " + pArray[cnt].getRating());
-            printToUser("Player team: " + pArray[cnt].getTeam() + "\n");
+            if(pArray[cnt] != null){
+                //print player info
+                printToUser("Player name: \t" + pArray[cnt].getName() + "\n");
+                printToUser("Player rating: " + pArray[cnt].getRating());
+                printToUser("Player team: " + pArray[cnt].getTeam() + "\n");
+            }
+
         }
     }
 }

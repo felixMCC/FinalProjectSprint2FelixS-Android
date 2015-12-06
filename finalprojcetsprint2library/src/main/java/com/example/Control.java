@@ -18,25 +18,30 @@ public class Control {
         for(int cnt = 0; cnt < 3; cnt++){
             theView.printToUser("Random Number: " + theModel.randomNumber());
         }
+        //main program loop
+        do{
 
-        theView.printToUser("Iteration 2: Create & print players.");
-        //prompt user for total number of players
-        promptForTotalNumberPlayers();
+            theView.printToUser("Iteration 2: Create & print players.");
+            //prompt user for total number of players
+            promptForTotalNumberPlayers();
 
-        //create players
-        for(int cnt = 0; cnt < theModel.getNumberOfPlayers(); cnt++){
-            createPlayer();
-        }
+            //create players
+            for(int cnt = 0; cnt < theModel.getNumberOfPlayers(); cnt++){
+                createPlayer();
+            }
 
-        //print player info
-        printPlayerInfo();
+            //print player info
+            printPlayerInfo();
 
-        theView.printToUser("Iteration 3: Create number of teams and print.");
-        //prompt for number of teams
-        createNumberOfTeams();
+            theView.printToUser("Iteration 3: Create number of teams and print.");
+            //prompt for number of teams
+            createNumberOfTeams();
 
-        //print teams
-        theView.printTeams(theModel.getTeamsArray());
+            //print teams
+            theView.printTeams(theModel.getTeamsArray());
+            theView.printToUser("Would you like to create brand new teams?");
+        }while(theModel.checkYesNo());
+
 
     }
 
@@ -113,7 +118,7 @@ public class Control {
             //store valid int in temp value to figure out choice
             int tempIntMethod = theModel.verifyInteger(tempStringMethod);
             //make sure user enters valid choice
-            if(tempIntMethod > 0 && tempIntMethod < 3 ){
+            if(tempIntMethod == 1 || tempIntMethod == 2 ){
                 //set method for creating teams 1 = full random 2 = fair teams
                 theModel.setTeamCreationMethod(tempIntMethod);
             }else{

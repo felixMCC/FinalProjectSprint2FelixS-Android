@@ -7,6 +7,7 @@ public class Team {
     private int teamNumber = 0;             //team number
     private int fitPlayersEvenly = 0;       //How many players can fit evenly into this team
     private int currentNumberOfPlayers = 0; //how many players are inside this team right now
+    private int teamRating = 0;             //Sum of all player's skill ratings
     private Player[] playerArray;           //holds player objects
 
     //creates the team, starting with team number then the array to hold the players
@@ -34,6 +35,8 @@ public class Team {
         return currentNumberOfPlayers;
     }
 
+    public int getTeamRating(){ return teamRating;}
+
     //setter methods
 
     public void setFitPlayersEvenly(int number){
@@ -48,5 +51,17 @@ public class Team {
     //add player to this team
     public void addPlayerToTeam(Player plyr){
         playerArray[getCurrentNumberOfPlayers()] = plyr;
+    }
+
+    //adds all player's ratings toget to form a total team rating
+    public void calcTeamRating(){
+        int tempTeamRating = 0;
+        for(int cnt = 0; cnt < playerArray.length; cnt++){
+            if(playerArray[cnt] != null){
+                tempTeamRating += playerArray[cnt].getRating();
+            }
+        }
+        //set teams total skill level rating
+        teamRating = tempTeamRating;
     }
 }
