@@ -10,39 +10,50 @@ public class Control {
 
     //main program
     public void runProgram(){
-        //make sure I can reference the Model and View
-        theView.printToUser("Iteration 1: Verify Model & View and random number.\n");
-        theModel.identify();
-        theView.identify();
+        //introduction
+        theView.printToUser("Java For Android - Final Project\nTeam Randomizer\nBy: Nestor (Felix) Sotres");
+        theView.printToUser("\nWelcome! This program helps you create teams from a group of people.\nYou can choose to create teams via Full Random Method or Fair Teams. ");
+        theView.printToUser("Full Random: Simply enter the players info and number of teams. The Team Randomizer will randomly generate teams for you.");
+        theView.printToUser("Fair Teams: Allows you to enter a rating (skill level) for each player before creating teams. Team Randomizer will attempt to create teams with similar skill levels.\n");
 
-        for(int cnt = 0; cnt < 3; cnt++){
-            theView.printToUser("Random Number: " + theModel.randomNumber());
-        }
         //main program loop
         do{
+            //prompt for team creation options 1 = fair teams random 2 = random teams
+            promptTeamCreationMethod();
 
-            theView.printToUser("Iteration 2: Create & print players.");
             //prompt user for total number of players
             promptForTotalNumberPlayers();
 
+
             //create players
             for(int cnt = 0; cnt < theModel.getNumberOfPlayers(); cnt++){
-                createPlayer();
+                //Check if team creation is "Fair Teams" or "Random Teams"
+                if(theModel.getTeamCreationMethod() == 1){
+                    //Fair Teams require player skill rating
+                    createPlayerWithRating();
+                }else{
+                    //Random Teams DONT require skill rating
+                    createPlayerNoRating();
+                }
+
             }
 
-            //print player info
-            printPlayerInfo();
+            //print player info (Testing)
+            //printPlayerInfo();
 
-            theView.printToUser("Iteration 3: Create number of teams and print.");
             //prompt for number of teams
             createNumberOfTeams();
 
+            //Once all teams are created, calculate each team's cumulative skill level
+            theModel.calculateAllTeamSkillLevels();
+
             //print teams
-            theView.printTeams(theModel.getTeamsArray());
-            theView.printToUser("Would you like to create brand new teams?");
+            theView.printTeams(theModel.getTeamsArray(), theModel.getTeamCreationMethod());
+            theView.printToUser("\nWould you like to create brand new teams?\n(Y = Yes / N = No)");
         }while(theModel.checkYesNo());
 
-
+        theView.printToUser("Thank you for using Team Randomizer. Have a nice day!");
+        System.exit(0);
     }
 
     //prompts user for total number of players
@@ -51,10 +62,14 @@ public class Control {
         try {
             //get the number of players from the user
             int tempTotalPlayers = Integer.parseInt(theModel.getUserInput());
-            if(tempTotalPlayers > 0) {
+            if(tempTotalPlayers > 1) {
                 //set the total number of players in the model
                 theModel.setNumberOfPlayers(tempTotalPlayers);
+            }else{
+                theView.printToUser("Please check entry and try again.");
+                promptForTotalNumberPlayers();
             }
+
         }catch(NumberFormatException e){
             //error parsing string to int, try again
             theView.printToUser("Please check entry and try again.");
@@ -63,7 +78,7 @@ public class Control {
     }
 
     //prompts user for player info and creates player objects
-    private void createPlayer(){
+    private void createPlayerWithRating(){
         try{
             //temp variables
             String tempName = "";
@@ -77,18 +92,31 @@ public class Control {
         }catch(NumberFormatException e){
             //error parsing string to int, try again
             theView.printToUser("Please check entry and try again.");
-            createPlayer();
+            createPlayerWithRating();
         }
+    }
 
-
+    //prompts user for player info and creates player objects
+    private void createPlayerNoRating(){
+        try{
+            //temp variables
+            String tempName = "";
+            theView.printToUser("Please enter player's name:");
+            tempName = theModel.getUserInput();
+            //create player object and store within the model
+            theModel.createAndStorePlayer(tempName, 1);
+        }catch(NumberFormatException e){
+            //error parsing string to int, try again
+            theView.printToUser("Please check entry and try again.");
+            createPlayerNoRating();
+        }
     }
 
     //creates teams
     private void createNumberOfTeams(){
         //prompt user for number of teams
         promptForNumberOfTeams();
-        //prompt for team creation options 1 = full random 2 = fair teams
-        promptTeamCreationMethod();
+
         //create teams
         theModel.createTeams();
 
@@ -100,7 +128,7 @@ public class Control {
         theView.printToUser("How many teams need to be created?");
         String tempStringTeams = theModel.getUserInput();   //store number of teams from user
         //send value to be verified
-        if (theModel.validateTeams(tempStringTeams)){
+        if (theModel.validateTeams(tempStringTeams) && theModel.verifyInteger(tempStringTeams) > 1){
             //number of teams is valid, do nothing (number of teams has been set inside the model)
         }else{
             //invalid number of teams, try again
@@ -111,7 +139,7 @@ public class Control {
 
     //prompt user for a way to create teams
     private void promptTeamCreationMethod(){
-        theView.printToUser("How would you like to create teams?\n1 = Full Random, 2 = Fair Teams\n");
+        theView.printToUser("How would you like to create teams?\n1 = Fair Teams, 2 = Full Random\n");
         String tempStringMethod = theModel.getUserInput();    //get user input
         //verity for valid integer
         if(theModel.verifyInteger(tempStringMethod) > 0){

@@ -64,7 +64,7 @@ public class Model {
 
     //generate a random number
     public int randomNumber(){
-        System.out.println("Inside randomNumber()\nRandom Limit: " + getRandomLimit());
+
         //get random number from generator (from 0 - randomLimit)
         int randomNum = generator.nextInt(randomLimit);
         if(randomNum == 0){
@@ -80,7 +80,7 @@ public class Model {
     //gets input from user
     public String getUserInput(){
         String temp = input.nextLine();
-        System.out.println("echo: " + temp);
+        //System.out.println("echo: " + temp); //testing
         return temp;
     }
 
@@ -125,18 +125,18 @@ public class Model {
 
     //separates players into teams given by user
     public void createTeams(){
-        System.out.println("Number of Players: " + numberOfPlayers + " divided by Number of teams: " + numberOfTeams + "\nResult:" + (numberOfPlayers / numberOfTeams));
 
         //set random number max value (so that it picks a team from 1 to the number input by the user)
         setRandomLimit(getNumberOfTeams());
 
         switch (getTeamCreationMethod()){
             case 1:
-                //full random
+                //fair teams
                 createFullRandomTeams();
                 break;
             case 2:
-                //fair teams
+                //random teams (same method is called as every player is automatically given a rating of 1)
+                createFullRandomTeams();
                 break;
             default:
                 //full random
@@ -168,7 +168,7 @@ public class Model {
         //create array to hold team objects (+1 to help with numbering schema)
         teamsArray = new Team[getNumberOfTeams()+1];
         //figure out size of the array holding players
-        int teamArraySize = getNumberOfPlayers() / 2;   //A team will have at most 1/2 the players
+        int teamArraySize = (getNumberOfPlayers() / 2) + 2;   //A team will have at most 1/2 the players (plus 2 to handle remainders)
 
         for(int cnt = 0; cnt < getNumberOfTeams(); cnt++){
             //starting from position 1 in the array, set array objects
@@ -176,15 +176,15 @@ public class Model {
         }
 
         //testing, print teams created
-        System.out.println("Teams requested by user: " + getNumberOfTeams() + "\nTeams created (teamsArray Size): " + teamsArray.length);
+        /*
         for(int cnt2 = 1; cnt2 < teamsArray.length; cnt2++){
             System.out.println("Team Number: " + teamsArray[cnt2].getTeamNumber() + "teamsArray Position: " + cnt2);
-        }
+        }*/
     }
 
     //randomly places players into team objects
     private void randomlyPlacePlayerInTeam() {
-        System.out.println("\nInside randomlyPlacePlayerInTeam()");
+
         //shuffle player Array List
         Collections.shuffle(players);
 
@@ -194,8 +194,7 @@ public class Model {
         int tempCurrentNumberOfPlayers = teamsArray[tempTeamChoice].getCurrentNumberOfPlayers();
         //get the number of players that will fit evenly into this team
         int tempFitPlayersEvenly = teamsArray[tempTeamChoice].getFitPlayersEvenly();
-        System.out.println("Comparison for placing team will be: ");
-        System.out.println("Team Choice " + tempTeamChoice + "\n Current number of players: " + tempCurrentNumberOfPlayers + " Number of Players that fit evenly: " + tempFitPlayersEvenly);
+
         //check to see if the number of players that fit evenly in this team has been reached
         if( tempCurrentNumberOfPlayers < tempFitPlayersEvenly){
             //if team still has room (number of players in team is less than can fit in the team evenly)
@@ -204,9 +203,8 @@ public class Model {
 
         }else{
             //Number of players that can fit evenly has been reached
-
             //find out if any team has an opening left
-            System.out.println("Need to find team that has an opening.");
+
             Player tempPlayer2 = itPlayers.next();  //get player to add to team
             //else select a different team that has not reached the max number of players that fit evenly
             int teamNotFull = getTeamNumberNotFullYet();
@@ -217,27 +215,22 @@ public class Model {
 
             }else{
                 //all teams have the max number of players that fit evenly into them
-
                 //find the team that has the lowest player rating and add player to that team
-                System.out.println("All teams have max players that fit evenly.\nNeed to find team with lowest skill rating.");
+
                 //have all teams calculate their total skill level
                 calculateAllTeamSkillLevels();
 
                 //find team with lowest skill rating
                 int lowestRatedTeam = findLowestRatedTeam();
-                System.out.println("Var: lowestRatedTeam: " + lowestRatedTeam);
                 //add player to lowest rating team
                 teamsArray[lowestRatedTeam].addPlayerToTeam(tempPlayer2);
-                System.out.println("Team number: " + lowestRatedTeam + " Player: " + tempPlayer2.getName());
                 //set team number for player
                 tempPlayer2.setTeam(lowestRatedTeam);
                 //remove player
-                System.out.println("about to remove player from iterating object...");
                 itPlayers.remove();
-                System.out.println("removed player");
                 //increase count of players in team
                 teamsArray[lowestRatedTeam].incrementNumberOfPlayers();
-                System.out.println("Team now has " + teamsArray[lowestRatedTeam].getCurrentNumberOfPlayers() + " Max players Evenly: " + teamsArray[lowestRatedTeam].getFitPlayersEvenly());
+
 
             }
 
@@ -254,25 +247,21 @@ public class Model {
         tempPlayer.setTeam(tTeamChoice);
         //get player and place into team number
         teamsArray[tTeamChoice].addPlayerToTeam(tempPlayer);
-        System.out.println("Team number: " + tTeamChoice + " Player: " + tempPlayer.getName());
         //remove player from arraylist of players
         itPlayers.remove();
-        System.out.println("removed player");
         //increase count of players in team
         teamsArray[tTeamChoice].incrementNumberOfPlayers();
-        System.out.println("Team " + teamsArray[tTeamChoice].getTeamNumber() + " now has " + teamsArray[tTeamChoice].getCurrentNumberOfPlayers() + " players. Max players Evenly: " + teamsArray[tTeamChoice].getFitPlayersEvenly());
 
     }
 
 
     //returns a team number iteratively to fit a new player into
     private int getTeamNumberNotFullYet(){
-        System.out.println("getTeamNumberNotFullYet()");
         //iterate through teams
         for(int cnt=1; cnt<= getNumberOfTeams(); cnt++){
             //find a team that hasnt reached its max number of players that can fit evenly
             if(teamsArray[cnt].getCurrentNumberOfPlayers() < teamsArray[cnt].getFitPlayersEvenly()){
-                System.out.println("cnt = " + cnt + " Team Number: " + teamsArray[cnt].getTeamNumber() + " Number of players: " + teamsArray[cnt].getCurrentNumberOfPlayers() + " Players that fit evenly: " + teamsArray[cnt].getFitPlayersEvenly());
+
                 return cnt;
             }
         }
@@ -286,18 +275,15 @@ public class Model {
         teamsArray[teamNFull].addPlayerToTeam(tPlayer2);
         //set team number for player
         tPlayer2.setTeam(teamNFull);
-        System.out.println("Team number: " + teamNFull + " Player: " + tPlayer2.getName());
         //remove player
         itPlayers.remove();
-        System.out.println("removed player");
         //increase count of players in team
         teamsArray[teamNFull].incrementNumberOfPlayers();
-        System.out.println("Team now has " + teamsArray[teamNFull].getCurrentNumberOfPlayers() + " Max players Evenly: " + teamsArray[teamNFull].getFitPlayersEvenly());
 
     }
 
     //Iterates through each team having them sum up its player's total skill level
-    private void calculateAllTeamSkillLevels(){
+    public void calculateAllTeamSkillLevels(){
         //iterate through and calculate all team ratings
         for(int tCount = 0; tCount < teamsArray.length; tCount++){
             if(teamsArray[tCount] != null){
@@ -310,15 +296,12 @@ public class Model {
     private int findLowestRatedTeam(){
 
         int lRatedTeam = teamsArray[1].getTeamNumber();    //get first team in array
-        System.out.println("teamsArray[1]. Team Number: " + teamsArray[1].getTeamNumber() + " Team Rating: " + teamsArray[1].getTeamRating());
         for(int rCount = 2; rCount < teamsArray.length; rCount++){
-            System.out.println("Current lowest rated team: Team " + teamsArray[lRatedTeam].getTeamNumber() + " Rating: " + teamsArray[lRatedTeam].getTeamRating());
-            System.out.println("Iteration Cnt: " + rCount + " Team Number: " + teamsArray[rCount].getTeamNumber() + "Team Rating: " + teamsArray[rCount].getTeamRating());
+
             //if next team on for-loop has a lower rating, set it as the lowest rated team
             if(teamsArray[rCount].getTeamRating() < teamsArray[lRatedTeam].getTeamRating()){
 
                 lRatedTeam = teamsArray[rCount].getTeamNumber();
-                System.out.println("NEW lowest rated team: " + lRatedTeam + " team rating: " + teamsArray[rCount].getTeamRating());
             }
         }
         return lRatedTeam;
@@ -333,14 +316,9 @@ public class Model {
         String tryAgain = getUserInput();
         if(tryAgain.equalsIgnoreCase("Y") || tryAgain.equalsIgnoreCase("Yes")){
             return true;
-        }else if(tryAgain.equalsIgnoreCase("N") || tryAgain.equalsIgnoreCase("No")){
-            return false;
         }else{
-            //invalid input try again
-            checkYesNo();
+            return false;
         }
-        //should never reach here, but by default say yes
-        return true;
     }
 }
 
